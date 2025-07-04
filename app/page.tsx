@@ -28,6 +28,7 @@ import Image from "next/image"
 export default function ThiagoPalmaSite() {
   const [scrollY, setScrollY] = useState(0)
   const [isVisible, setIsVisible] = useState(false)
+  const [animatedCards, setAnimatedCards] = useState<Set<number>>(new Set())
 
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId)
@@ -43,6 +44,29 @@ export default function ThiagoPalmaSite() {
     }
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
+  }, [])
+
+  useEffect(() => {
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: "0px 0px -50px 0px",
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        const cardIndex = Number.parseInt(entry.target.getAttribute("data-card-index") || "0")
+        if (entry.isIntersecting) {
+          setAnimatedCards((prev) => new Set([...prev, cardIndex]))
+        }
+        // Removido o else que fazia o fade out
+      })
+    }, observerOptions)
+
+    // Observar todos os cards de serviços
+    const cards = document.querySelectorAll("[data-card-index]")
+    cards.forEach((card) => observer.observe(card))
+
+    return () => observer.disconnect()
   }, [])
 
   return (
@@ -186,9 +210,6 @@ export default function ThiagoPalmaSite() {
           <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center backdrop-blur-sm">
             <span className="text-white font-bold text-sm">TP</span>
           </div>
-          <span className="ml-2 text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-            Thiago Palma
-          </span>
         </Link>
         <nav className="ml-auto flex gap-4 sm:gap-6">
           <Link href="#sobre" className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors">
@@ -208,14 +229,15 @@ export default function ThiagoPalmaSite() {
 
       <main className="relative z-10 pt-16">
         {/* Hero Section - Nome Centralizado */}
-        <section className="w-full h-screen flex items-center justify-center">
+        <section className="w-full h-[85vh] flex items-center justify-center">
           <div className="text-center space-y-8 animate-fade-in">
             <div className="space-y-4">
-              <h1 className="text-6xl md:text-8xl lg:text-9xl font-bold tracking-tighter bg-gradient-to-r from-gray-800 via-blue-600 to-purple-600 bg-clip-text text-transparent drop-shadow-lg animate-text-fade">
+              <h1 className="text-6xl md:text-8xl lg:text-9xl font-bold tracking-tighter bg-gradient-to-r from-gray-800 via-blue-600 to-purple-600 bg-clip-text text-transparent drop-shadow-lg animate-text-fade leading-[1.2] pb-8 pt-4">
                 Thiago Palma
               </h1>
-              <p className="text-2xl md:text-4xl text-gray-600 font-light tracking-wide animate-text-fade-delay">
-                especialista em tráfego
+              <p className="text-lg md:text-xl lg:text-2xl text-gray-600 font-light leading-relaxed italic max-w-4xl mx-auto animate-text-fade-delay">
+                Há 6 anos transformando cliques em vendas, visitantes em clientes e campanhas em faturamento.
+                Estratégias que geram resultados reais.
               </p>
             </div>
 
@@ -227,7 +249,7 @@ export default function ThiagoPalmaSite() {
         </section>
 
         {/* Seção com Foto e Informações */}
-        <section className="w-full py-12 md:py-24 lg:py-32">
+        <section className="w-full py-8 md:py-16 lg:py-20">
           <div className="container px-4 md:px-6 mx-auto">
             <div className="grid items-center gap-6 lg:grid-cols-2 lg:gap-12">
               {/* Área da Foto */}
@@ -256,8 +278,13 @@ export default function ThiagoPalmaSite() {
               >
                 <div className="space-y-4">
                   <p className="max-w-[600px] text-gray-700 md:text-lg leading-relaxed">
-                    Transformo investimentos em tráfego pago em resultados extraordinários. Mais de 5 anos gerando
-                    milhões em vendas através de campanhas estratégicas no Google Ads e Meta Ads.
+                    Cansado de investir e não ter retorno? Chega de desperdiçar seu dinheiro, com as estratégias certas,
+                    seus anúncios vão atrair quem realmente compra. Se o objetivo é vender todos os meses, você está no
+                    lugar certo.
+                  </p>
+                  <p className="max-w-[600px] text-gray-700 md:text-lg leading-relaxed font-medium">
+                    Transformo investimentos em resultados extraordinários. Mais de 1 milhão em vendas nos últimos 6
+                    meses através de campanhas estratégicas.
                   </p>
                 </div>
                 <div className="flex flex-col sm:flex-row gap-4 pt-4">
@@ -282,8 +309,8 @@ export default function ThiagoPalmaSite() {
                 </div>
                 <div className="flex items-center gap-6 pt-4">
                   <div className="text-center transform hover:scale-110 transition-transform duration-200">
-                    <div className="text-2xl font-bold text-gray-800">R$ 50M+</div>
-                    <div className="text-sm text-gray-600">em vendas geradas</div>
+                    <div className="text-2xl font-bold text-gray-800">R$ 1M+</div>
+                    <div className="text-sm text-gray-600">nos últimos 6 meses</div>
                   </div>
                   <div className="text-center transform hover:scale-110 transition-transform duration-200">
                     <div className="text-2xl font-bold text-gray-800">500+</div>
@@ -300,7 +327,7 @@ export default function ThiagoPalmaSite() {
         </section>
 
         {/* Sobre Section */}
-        <section id="sobre" className="w-full py-12 md:py-24 lg:py-32 bg-gray-50/50">
+        <section id="sobre" className="w-full py-8 md:py-16 lg:py-20 bg-gray-50/50">
           <div className="container px-4 md:px-6 mx-auto">
             <div className="grid items-center gap-6 lg:grid-cols-2 lg:gap-12">
               <div className="space-y-6 animate-fade-in-up">
@@ -363,7 +390,7 @@ export default function ThiagoPalmaSite() {
         </section>
 
         {/* Serviços Section */}
-        <section id="servicos" className="w-full py-12 md:py-24 lg:py-32">
+        <section id="servicos" className="w-full py-8 md:py-16 lg:py-20">
           <div className="container px-4 md:px-6 mx-auto">
             <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12 animate-text-fade">
               <Badge className="bg-purple-100 text-purple-700 border-purple-200">Serviços</Badge>
@@ -375,7 +402,12 @@ export default function ThiagoPalmaSite() {
               </p>
             </div>
             <div className="mx-auto grid max-w-6xl items-center gap-6 lg:grid-cols-3 lg:gap-8">
-              <Card className="bg-white/80 border-gray-200 hover:shadow-xl transition-all duration-300 group transform hover:scale-105 hover:-translate-y-2">
+              <Card
+                data-card-index="0"
+                className={`bg-white/80 border-gray-200 hover:shadow-xl transition-all duration-700 group transform hover:scale-105 hover:-translate-y-2 ${
+                  animatedCards.has(0) ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+                }`}
+              >
                 <CardHeader>
                   <Search className="h-12 w-12 text-blue-600 mb-4 group-hover:scale-110 transition-transform duration-300" />
                   <CardTitle className="text-gray-800">Google Ads</CardTitle>
@@ -405,7 +437,12 @@ export default function ThiagoPalmaSite() {
                 </CardContent>
               </Card>
 
-              <Card className="bg-white/80 border-gray-200 hover:shadow-xl transition-all duration-300 group transform hover:scale-105 hover:-translate-y-2">
+              <Card
+                data-card-index="1"
+                className={`bg-white/80 border-gray-200 hover:shadow-xl transition-all duration-700 group transform hover:scale-105 hover:-translate-y-2 ${
+                  animatedCards.has(1) ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+                }`}
+              >
                 <CardHeader>
                   <Globe className="h-12 w-12 text-purple-600 mb-4 group-hover:scale-110 transition-transform duration-300" />
                   <CardTitle className="text-gray-800">Meta Ads</CardTitle>
@@ -435,7 +472,12 @@ export default function ThiagoPalmaSite() {
                 </CardContent>
               </Card>
 
-              <Card className="bg-white/80 border-gray-200 hover:shadow-xl transition-all duration-300 group transform hover:scale-105 hover:-translate-y-2">
+              <Card
+                data-card-index="2"
+                className={`bg-white/80 border-gray-200 hover:shadow-xl transition-all duration-700 group transform hover:scale-105 hover:-translate-y-2 ${
+                  animatedCards.has(2) ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+                }`}
+              >
                 <CardHeader>
                   <BarChart3 className="h-12 w-12 text-green-600 mb-4 group-hover:scale-110 transition-transform duration-300" />
                   <CardTitle className="text-gray-800">CRO & Analytics</CardTitle>
@@ -464,12 +506,117 @@ export default function ThiagoPalmaSite() {
                   </ul>
                 </CardContent>
               </Card>
+
+              <Card
+                data-card-index="3"
+                className={`bg-white/80 border-gray-200 hover:shadow-xl transition-all duration-700 group transform hover:scale-105 hover:-translate-y-2 ${
+                  animatedCards.has(3) ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+                }`}
+              >
+                <CardHeader>
+                  <Globe className="h-12 w-12 text-orange-600 mb-4 group-hover:scale-110 transition-transform duration-300" />
+                  <CardTitle className="text-gray-800">Criação de Landing Pages</CardTitle>
+                  <CardDescription className="text-gray-600">
+                    Landing pages otimizadas para conversão com design responsivo e foco em resultados
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <ul className="text-sm text-gray-600 space-y-2">
+                    <li className="flex items-center">
+                      <CheckCircle className="h-3 w-3 text-green-600 mr-2" />
+                      Design Responsivo
+                    </li>
+                    <li className="flex items-center">
+                      <CheckCircle className="h-3 w-3 text-green-600 mr-2" />
+                      Otimização para Conversão
+                    </li>
+                    <li className="flex items-center">
+                      <CheckCircle className="h-3 w-3 text-green-600 mr-2" />
+                      Testes A/B
+                    </li>
+                    <li className="flex items-center">
+                      <CheckCircle className="h-3 w-3 text-green-600 mr-2" />
+                      Integração com CRM
+                    </li>
+                  </ul>
+                </CardContent>
+              </Card>
+
+              <Card
+                data-card-index="4"
+                className={`bg-white/80 border-gray-200 hover:shadow-xl transition-all duration-700 group transform hover:scale-105 hover:-translate-y-2 ${
+                  animatedCards.has(4) ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+                }`}
+              >
+                <CardHeader>
+                  <Zap className="h-12 w-12 text-yellow-600 mb-4 group-hover:scale-110 transition-transform duration-300" />
+                  <CardTitle className="text-gray-800">Automações</CardTitle>
+                  <CardDescription className="text-gray-600">
+                    Automações inteligentes para nutrir leads e aumentar a eficiência das campanhas
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <ul className="text-sm text-gray-600 space-y-2">
+                    <li className="flex items-center">
+                      <CheckCircle className="h-3 w-3 text-green-600 mr-2" />
+                      Email Marketing
+                    </li>
+                    <li className="flex items-center">
+                      <CheckCircle className="h-3 w-3 text-green-600 mr-2" />
+                      Sequências de Nutrição
+                    </li>
+                    <li className="flex items-center">
+                      <CheckCircle className="h-3 w-3 text-green-600 mr-2" />
+                      Chatbots Inteligentes
+                    </li>
+                    <li className="flex items-center">
+                      <CheckCircle className="h-3 w-3 text-green-600 mr-2" />
+                      Integração com CRM
+                    </li>
+                  </ul>
+                </CardContent>
+              </Card>
+
+              <Card
+                data-card-index="5"
+                className={`bg-white/80 border-gray-200 hover:shadow-xl transition-all duration-700 group transform hover:scale-105 hover:-translate-y-2 ${
+                  animatedCards.has(5) ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+                }`}
+              >
+                <CardHeader>
+                  <Target className="h-12 w-12 text-red-600 mb-4 group-hover:scale-110 transition-transform duration-300" />
+                  <CardTitle className="text-gray-800">Estratégia de Marca</CardTitle>
+                  <CardDescription className="text-gray-600">
+                    Desenvolvimento de identidade visual e posicionamento estratégico da marca
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <ul className="text-sm text-gray-600 space-y-2">
+                    <li className="flex items-center">
+                      <CheckCircle className="h-3 w-3 text-green-600 mr-2" />
+                      Identidade Visual
+                    </li>
+                    <li className="flex items-center">
+                      <CheckCircle className="h-3 w-3 text-green-600 mr-2" />
+                      Posicionamento de Marca
+                    </li>
+                    <li className="flex items-center">
+                      <CheckCircle className="h-3 w-3 text-green-600 mr-2" />
+                      Estratégia de Conteúdo
+                    </li>
+                    <li className="flex items-center">
+                      <CheckCircle className="h-3 w-3 text-green-600 mr-2" />
+                      Análise de Concorrência
+                    </li>
+                  </ul>
+                </CardContent>
+              </Card>
             </div>
           </div>
         </section>
 
         {/* Portfolio/Cases Section */}
-        <section id="portfolio" className="w-full py-12 md:py-24 lg:py-32 bg-gray-50/50">
+        <section id="portfolio" className="w-full py-8 md:py-16 lg:py-20 bg-gray-50/50">
           <div className="container px-4 md:px-6 mx-auto">
             <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12 animate-fade-in-up">
               <Badge className="bg-green-100 text-green-700 border-green-200">Casos de Sucesso</Badge>
@@ -551,7 +698,7 @@ export default function ThiagoPalmaSite() {
         </section>
 
         {/* Contato Section */}
-        <section id="contato" className="w-full py-12 md:py-24 lg:py-32">
+        <section id="contato" className="w-full py-8 md:py-16 lg:py-20">
           <div className="container px-4 md:px-6 mx-auto">
             <div className="grid items-center gap-6 lg:grid-cols-2 lg:gap-12">
               <div className="flex flex-col justify-center space-y-6 animate-fade-in-up">
@@ -568,7 +715,7 @@ export default function ThiagoPalmaSite() {
                 <div className="space-y-4">
                   <div className="flex items-center space-x-3 p-3 rounded-lg bg-white/80 border border-gray-200 transform hover:scale-105 transition-all duration-300 shadow-sm">
                     <Mail className="h-5 w-5 text-blue-600" />
-                    <span className="text-gray-700">thiago@trafegoprofissional.com</span>
+                    <span className="text-gray-700">thiagodasilvapalma@gmail.com</span>
                   </div>
                   <div className="flex items-center space-x-3 p-3 rounded-lg bg-white/80 border border-gray-200 transform hover:scale-105 transition-all duration-300 shadow-sm">
                     <Phone className="h-5 w-5 text-green-600" />
@@ -630,7 +777,7 @@ export default function ThiagoPalmaSite() {
 
       {/* Footer */}
       <footer className="relative z-10 flex flex-col gap-2 sm:flex-row py-6 w-full shrink-0 items-center px-4 md:px-6 border-t border-gray-200 bg-white/80 backdrop-blur-md">
-        <p className="text-xs text-gray-600">© 2024 Vitor Palma - Desenvolvedor Web. Todos os direitos reservados.</p>
+        <p className="text-xs text-gray-600">© 2025 Vitor Palma - Desenvolvedor Web. Todos os direitos reservados.</p>
         <nav className="sm:ml-auto flex gap-4 sm:gap-6">
           <Link
             href="#"
