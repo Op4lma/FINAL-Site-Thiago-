@@ -19,7 +19,6 @@ import {
   ArrowRight,
   CheckCircle,
   Play,
-  ChevronDown,
 } from "lucide-react"
 import Link from "next/link"
 import { useEffect, useState } from "react"
@@ -212,25 +211,31 @@ export default function ThiagoPalmaSite() {
           </div>
         </Link>
         <nav className="ml-auto flex gap-4 sm:gap-6">
-          <Link href="#sobre" className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors">
-            Sobre
-          </Link>
-          <Link href="#servicos" className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors">
+          <button
+            onClick={() => scrollToSection("servicos")}
+            className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors cursor-pointer"
+          >
             Serviços
-          </Link>
-          <Link href="#portfolio" className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors">
+          </button>
+          <button
+            onClick={() => scrollToSection("portfolio")}
+            className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors cursor-pointer"
+          >
             Portfólio
-          </Link>
-          <Link href="#contato" className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors">
+          </button>
+          <button
+            onClick={() => scrollToSection("contato")}
+            className="text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors cursor-pointer"
+          >
             Contato
-          </Link>
+          </button>
         </nav>
       </header>
 
       <main className="relative z-10 pt-16">
         {/* Hero Section - Nome Centralizado */}
-        <section className="w-full h-[85vh] flex items-center justify-center">
-          <div className="text-center space-y-8 animate-fade-in">
+        <section className="w-full h-[70vh] flex items-center justify-center">
+          <div className="text-center space-y-6 animate-fade-in">
             <div className="space-y-4">
               <h1 className="text-6xl md:text-8xl lg:text-9xl font-bold tracking-tighter bg-gradient-to-r from-gray-800 via-blue-600 to-purple-600 bg-clip-text text-transparent drop-shadow-lg animate-text-fade leading-[1.2] pb-8 pt-4">
                 Thiago Palma
@@ -242,14 +247,12 @@ export default function ThiagoPalmaSite() {
             </div>
 
             {/* Indicador de Scroll */}
-            <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
-              <ChevronDown className="h-8 w-8 text-gray-500" />
-            </div>
+            <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce"></div>
           </div>
         </section>
 
         {/* Seção com Foto e Informações */}
-        <section className="w-full py-8 md:py-16 lg:py-20">
+        <section className="w-full py-6 md:py-12 lg:py-16">
           <div className="container px-4 md:px-6 mx-auto">
             <div className="grid items-center gap-6 lg:grid-cols-2 lg:gap-12">
               {/* Área da Foto */}
@@ -327,7 +330,7 @@ export default function ThiagoPalmaSite() {
         </section>
 
         {/* Sobre Section */}
-        <section id="sobre" className="w-full py-8 md:py-16 lg:py-20 bg-gray-50/50">
+        <section id="sobre" className="w-full py-6 md:py-12 lg:py-16 bg-gray-50/50">
           <div className="container px-4 md:px-6 mx-auto">
             <div className="grid items-center gap-6 lg:grid-cols-2 lg:gap-12">
               <div className="space-y-6 animate-fade-in-up">
@@ -390,7 +393,7 @@ export default function ThiagoPalmaSite() {
         </section>
 
         {/* Serviços Section */}
-        <section id="servicos" className="w-full py-8 md:py-16 lg:py-20">
+        <section id="servicos" className="w-full py-6 md:py-12 lg:py-16">
           <div className="container px-4 md:px-6 mx-auto">
             <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12 animate-text-fade">
               <Badge className="bg-purple-100 text-purple-700 border-purple-200">Serviços</Badge>
@@ -616,7 +619,7 @@ export default function ThiagoPalmaSite() {
         </section>
 
         {/* Portfolio/Cases Section */}
-        <section id="portfolio" className="w-full py-8 md:py-16 lg:py-20 bg-gray-50/50">
+        <section id="portfolio" className="w-full py-6 md:py-12 lg:py-16 bg-gray-50/50">
           <div className="container px-4 md:px-6 mx-auto">
             <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12 animate-fade-in-up">
               <Badge className="bg-green-100 text-green-700 border-green-200">Casos de Sucesso</Badge>
@@ -698,7 +701,7 @@ export default function ThiagoPalmaSite() {
         </section>
 
         {/* Contato Section */}
-        <section id="contato" className="w-full py-8 md:py-16 lg:py-20">
+        <section id="contato" className="w-full py-6 md:py-12 lg:py-16">
           <div className="container px-4 md:px-6 mx-auto">
             <div className="grid items-center gap-6 lg:grid-cols-2 lg:gap-12">
               <div className="flex flex-col justify-center space-y-6 animate-fade-in-up">
