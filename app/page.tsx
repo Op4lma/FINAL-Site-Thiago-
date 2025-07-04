@@ -21,13 +21,14 @@ import {
   Play,
 } from "lucide-react"
 import Link from "next/link"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import Image from "next/image"
 
 export default function ThiagoPalmaSite() {
   const [scrollY, setScrollY] = useState(0)
   const [isVisible, setIsVisible] = useState(false)
   const [animatedCards, setAnimatedCards] = useState<Set<number>>(new Set())
+  const formRef = useRef<HTMLFormElement>(null);
 
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId)
@@ -67,6 +68,24 @@ export default function ThiagoPalmaSite() {
 
     return () => observer.disconnect()
   }, [])
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const nome = (form.elements.namedItem('nome') as HTMLInputElement)?.value || '';
+    const empresa = (form.elements.namedItem('empresa') as HTMLInputElement)?.value || '';
+    const email = (form.elements.namedItem('email') as HTMLInputElement)?.value || '';
+    const whatsapp = (form.elements.namedItem('whatsapp') as HTMLInputElement)?.value || '';
+    const desafio = (form.elements.namedItem('desafio') as HTMLTextAreaElement)?.value || '';
+    const mensagem =
+      `Nome: ${nome}\n` +
+      `Empresa: ${empresa}\n` +
+      `E-mail: ${email}\n` +
+      `WhatsApp: ${whatsapp}\n` +
+      `Desafio com tráfego pago:\n${desafio}`;
+    const url = `https://wa.me/5548999166805?text=${encodeURIComponent(mensagem)}`;
+    window.open(url, '_blank');
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50 relative overflow-hidden">
@@ -240,7 +259,7 @@ export default function ThiagoPalmaSite() {
               <h1 className="text-6xl md:text-8xl lg:text-9xl font-bold tracking-tighter bg-gradient-to-r from-gray-800 via-blue-600 to-purple-600 bg-clip-text text-transparent drop-shadow-lg animate-text-fade leading-[1.2] pb-8 pt-4">
                 Thiago Palma
               </h1>
-              <p className="text-lg md:text-xl lg:text-2xl text-gray-600 font-light leading-relaxed italic max-w-4xl mx-auto animate-text-fade-delay">
+              <p className="px-4 text-lg md:text-xl lg:text-2xl text-gray-600 font-light leading-relaxed italic max-w-4xl mx-auto animate-text-fade-delay">
                 Há 6 anos transformando cliques em vendas, visitantes em clientes e campanhas em faturamento.
                 Estratégias que geram resultados reais.
               </p>
@@ -737,40 +756,47 @@ export default function ThiagoPalmaSite() {
               </div>
               <Card className="bg-white/80 border-gray-200 transform hover:scale-105 transition-all duration-500 animate-fade-in-up-delay shadow-lg">
                 <CardHeader>
-                  <CardTitle className="text-gray-800">Consultoria Gratuita</CardTitle>
+                  <CardTitle className="text-gray-800">Entre em contato</CardTitle>
                   <CardDescription className="text-gray-600">
-                    Preencha o formulário e receba uma análise completa do seu tráfego atual
+                    Preencha o formulário abaixo para entrar em contato
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <div className="grid grid-cols-2 gap-4">
+                  <form ref={formRef} onSubmit={handleSubmit} className="space-y-4">
+                    <div className="grid grid-cols-2 gap-4">
+                      <Input
+                        name="nome"
+                        placeholder="Nome"
+                        className="bg-white border-gray-300 text-gray-800 placeholder:text-gray-500 focus:border-blue-500 transition-colors"
+                      />
+                      <Input
+                        name="empresa"
+                        placeholder="Empresa"
+                        className="bg-white border-gray-300 text-gray-800 placeholder:text-gray-500 focus:border-blue-500 transition-colors"
+                      />
+                    </div>
                     <Input
-                      placeholder="Nome"
+                      name="email"
+                      type="email"
+                      placeholder="E-mail"
                       className="bg-white border-gray-300 text-gray-800 placeholder:text-gray-500 focus:border-blue-500 transition-colors"
                     />
                     <Input
-                      placeholder="Empresa"
+                      name="whatsapp"
+                      type="tel"
+                      placeholder="WhatsApp"
                       className="bg-white border-gray-300 text-gray-800 placeholder:text-gray-500 focus:border-blue-500 transition-colors"
                     />
-                  </div>
-                  <Input
-                    type="email"
-                    placeholder="E-mail"
-                    className="bg-white border-gray-300 text-gray-800 placeholder:text-gray-500 focus:border-blue-500 transition-colors"
-                  />
-                  <Input
-                    type="tel"
-                    placeholder="WhatsApp"
-                    className="bg-white border-gray-300 text-gray-800 placeholder:text-gray-500 focus:border-blue-500 transition-colors"
-                  />
-                  <Textarea
-                    placeholder="Qual seu principal desafio com tráfego pago?"
-                    className="min-h-[100px] bg-white border-gray-300 text-gray-800 placeholder:text-gray-500 focus:border-blue-500 transition-colors"
-                  />
-                  <Button className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-xl transform hover:scale-105 transition-all duration-300">
-                    Quero Minha Consultoria Gratuita
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Button>
+                    <Textarea
+                      name="desafio"
+                      placeholder="Qual seu principal desafio com tráfego pago?"
+                      className="min-h-[100px] bg-white border-gray-300 text-gray-800 placeholder:text-gray-500 focus:border-blue-500 transition-colors"
+                    />
+                    <Button type="submit" className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-xl transform hover:scale-105 transition-all duration-300">
+                      Quero Minha Consultoria Gratuita
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </Button>
+                  </form>
                 </CardContent>
               </Card>
             </div>
