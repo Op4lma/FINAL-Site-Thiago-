@@ -253,10 +253,10 @@ export default function ThiagoPalmaSite() {
 
       <main className="relative z-10 pt-16">
         {/* Hero Section - Nome Centralizado */}
-        <section className="w-full h-[70vh] flex items-center justify-center">
+        <section className="w-full h-[40vh] md:h-[60vh] flex items-center justify-center">
           <div className="text-center space-y-6 animate-fade-in">
             <div className="space-y-4">
-              <h1 className="text-6xl md:text-8xl lg:text-9xl font-bold tracking-tighter bg-gradient-to-r from-gray-800 via-blue-600 to-purple-600 bg-clip-text text-transparent drop-shadow-lg animate-text-fade leading-[1.2] pb-8 pt-4">
+              <h1 className="text-6xl md:text-8xl lg:text-9xl font-bold tracking-tighter bg-gradient-to-r from-gray-800 via-blue-600 to-purple-600 bg-clip-text text-transparent drop-shadow-lg animate-text-fade leading-tight pb-1 pt-1 md:pb-6 md:pt-2">
                 Thiago Palma
               </h1>
               <p className="px-4 text-lg md:text-xl lg:text-2xl text-gray-600 font-light leading-relaxed italic max-w-4xl mx-auto animate-text-fade-delay">
